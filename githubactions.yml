@@ -1,0 +1,42 @@
+name: Build and Deploy Lambda to S3
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_lambda:
+        description: 'Select the Lambda directory to build'
+        required: true
+        default: 'lambda-dir-1'
+        type: choice
+        options:
+          - 'reserve-notification-slack'
+          - 'lambda-dir-2'
+          - 'lambda-dir-3'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up Go 1.22
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.22
+
+      - name: Build Lambda from selected directory
+        run: |
+          mkdir -p ./build
+          cd ${{ github.event.inputs.target_lambda }}  # 選択したディレクトリに移動
+          GOOS=linux GOARCH=amd64 go build -o ../build/lambda_function main.go
+          cd ../build
+          zip target_lambda.zip target_lambda
+
+      - name: Upload Lambda ZIP to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws s3 cp ${{ github.event.inputs.target_lambda }}.zip s3://your-s3-bucket/path/to/${{ github.event.inputs.target_lambda }}.zip --region your-region
