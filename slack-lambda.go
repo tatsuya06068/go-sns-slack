@@ -72,3 +72,28 @@ func main() {
 	// Lambdaのエントリーポイント
 	lambda.Start(handleRequest)
 }
+
+
+
+// {
+// 	"Records": [
+// 	  {
+// 		"EventSource": "aws:sns",
+// 		"EventVersion": "1.0",
+// 		"EventSubscriptionArn": "arn:aws:sns:region:account-id:example-topic",
+// 		"Sns": {
+// 		  "Type": "Notification",
+// 		  "MessageId": "11111111-2222-3333-4444-555555555555",
+// 		  "TopicArn": "arn:aws:sns:region:account-id:example-topic",
+// 		  "Subject": "Test SNS Subject",
+// 		  "Message": "{\"channel_id\": \"C1234567890\", \"message\": \"This is a test message\", \"mentions\": [\"U1234567890\", \"U0987654321\"]}",
+// 		  "Timestamp": "2024-09-11T12:00:00.000Z",
+// 		  "SignatureVersion": "1",
+// 		  "Signature": "EXAMPLE_SIGNATURE",
+// 		  "SigningCertUrl": "EXAMPLE_CERT_URL",
+// 		  "UnsubscribeUrl": "EXAMPLE_UNSUBSCRIBE_URL",
+// 		  "MessageAttributes": {}
+// 		}
+// 	  }
+// 	]
+//   }
